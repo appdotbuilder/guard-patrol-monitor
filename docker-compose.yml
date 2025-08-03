@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: ${BACKEND_CONTAINER_NAME:-laravel-app}
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      APP_ENV: ${APP_ENV:-local}
+      APP_DEBUG: false
+      APP_KEY: ${APP_KEY:-base64:Zcw/bWvxV/CoIWR0+sTPOYQa7v5S340pVCdSgCbvPPQ=}
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE:-laravel}
+      DB_USERNAME: ${DB_USERNAME:-laravel}
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      CACHE_DRIVER: ${CACHE_STORE:-database}
+      SESSION_DRIVER: ${SESSION_DRIVER:-database}
+      QUEUE_CONNECTION: ${QUEUE_CONNECTION:-database}
+    volumes:
+      - storage:/var/www/html/storage/app
+      - logs:/var/www/html/storage/logs
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: ${POSTGRES_CONTAINER_NAME:-laravel-postgres}
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-laravel}
+      POSTGRES_USER: ${DB_USERNAME:-laravel}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-laravel}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
+
+volumes:
+  postgres_data:
+  storage:
+  logs:
+
+networks:
+  app-network:
+    name: ${NETWORK_NAME:-laravel-network}
+    driver: bridge 

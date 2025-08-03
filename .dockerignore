@@ -1,0 +1,65 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md
+
+# Development files
+.env
+.env.example
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules
+vendor
+
+# Build artifacts
+/public/build
+/public/hot
+/storage/app/public
+/storage/framework/cache/data
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+*.log
+
+# Tests
+tests
+phpunit.xml
+.phpunit.result.cache
+
+# Tools
+/.fleet
+/.vscode
+/.idea
+.php_cs.cache
+.phpunit.cache
+
+# NPM
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+*.tgz
+*.tar*
+coverage
+.nyc_output
+.cache
+dist
+tmp 
